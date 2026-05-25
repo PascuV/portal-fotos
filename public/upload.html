@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subir Foto</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>📤 Subir Foto</h1>
+    <a href="index.html" class="btn-back">← Volver a la galería</a>
+  </header>
+
+  <main class="upload-container">
+    <form id="upload-form">
+      <div class="drop-zone" id="drop-zone">
+        <p>Arrastra una imagen aquí o haz clic para seleccionar</p>
+        <input type="file" id="file-input" accept="image/*" hidden>
+      </div>
+      <img id="preview" class="preview" style="display:none;">
+      <button type="submit" id="submit-btn" disabled>Subir foto</button>
+    </form>
+    <p id="status"></p>
+  </main>
+
+  <script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const preview = document.getElementById('preview');
+    const form = document.getElementById('upload-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const status = document.getElementById('status');
+
+    let selectedFile = null;
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      handleFile(e.dataTransfer.files[0]);
+    });
+
+    fileInput.addEventListener('change', () => {
+      handleFile(fileInput.files[0]);
+    });
+
+    function handleFile(file) {
+      if (!file || !file.type.startsWith('image/')) {
+        status.textContent = 'Por favor selecciona una imagen válida';
+        return;
+      }
+      selectedFile = file;
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+      submitBtn.disabled = false;
+      status.textContent = '';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!selectedFile) return;
+
+      submitBtn.disabled = true;
+      status.textContent = 'Subiendo...';
+
+      const formData = new FormData();
+      formData.append('photo', selectedFile);
+
+      try {
+        const res = await fetch('/api/upload', { method: 'POST', body: formData });
+        const data = await res.json();
+
+        if (data.success) {
+          status.innerHTML = '✅ ¡Foto subida! <a href="index.html">Ver galería</a>';
+          preview.style.display = 'none';
+          selectedFile = null;
+        } else {
+          throw new Error(data.error || 'Error desconocido');
+        }
+      } catch (err) {
+        status.textContent = '❌ Error: ' + err.message;
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

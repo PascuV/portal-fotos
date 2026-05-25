@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galería de Fotos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>📸 Galería de Fotos</h1>
+    <a href="upload.html" class="btn-upload">Subir foto</a>
+  </header>
+
+  <main>
+    <!-- Carrusel -->
+    <section class="carousel-section">
+      <h2>Destacadas</h2>
+      <div class="carousel">
+        <button class="carousel-btn prev" id="carousel-prev">‹</button>
+        <div class="carousel-window">
+          <img id="carousel-image" src="" alt="Foto destacada">
+        </div>
+        <button class="carousel-btn next" id="carousel-next">›</button>
+      </div>
+    </section>
+
+    <!-- Galería -->
+    <section>
+      <div id="gallery" class="gallery"></div>
+      <p id="empty-msg" class="empty" style="display:none;">
+        No hay fotos todavía. ¡Sé el primero en subir una!
+      </p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
