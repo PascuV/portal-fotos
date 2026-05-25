@@ -3,36 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Galería de Fotos</title>
+  <title>Espejo de Fotos</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <h1>📸 Galería de Fotos</h1>
+    <div class="logo">
+      <span class="logo-icon">✨</span>
+      <span class="logo-text">Espejo de Fotos</span>
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="home">Espejo</button>
+      <button class="nav-tab" data-tab="all">Todas las fotos</button>
+    </nav>
+
     <a href="upload.html" class="btn-upload">Subir foto</a>
   </header>
 
   <main>
-    <!-- Carrusel -->
-    <section class="carousel-section">
-      <h2>Destacadas</h2>
-      <div class="carousel">
-        <button class="carousel-btn prev" id="carousel-prev">‹</button>
-        <div class="carousel-window">
-          <img id="carousel-image" src="" alt="Foto destacada">
+    <!-- SECCIÓN ESPEJO / CARRUSEL -->
+    <section id="home-section">
+      <div class="hero">
+        <div class="hero-text">
+          <h1>Sonríe al espejo 📸</h1>
+          <p>
+            Escanea el QR, súbete una foto y mírate en nuestro espejo vertical.
+            Las imágenes se mostrarán aquí y podrás descargarlas después.
+          </p>
+          <p class="hero-hint">
+            Tip: haz tus fotos en vertical para que se vean perfectas.
+          </p>
         </div>
-        <button class="carousel-btn next" id="carousel-next">›</button>
+
+        <div class="mirror-wrapper">
+          <div class="mirror-frame">
+            <div class="mirror-glow"></div>
+            <div class="mirror-inner">
+              <button class="carousel-btn mirror-btn prev" id="carousel-prev">‹</button>
+              <img id="carousel-image" src="" alt="Foto destacada">
+              <button class="carousel-btn mirror-btn next" id="carousel-next">›</button>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <section class="last-photos">
+        <h2>Últimas fotos</h2>
+        <div id="last-photos-strip" class="last-photos-strip"></div>
+      </section>
     </section>
 
-    <!-- Galería -->
-    <section>
+    <!-- SECCIÓN TODAS LAS FOTOS -->
+    <section id="all-section" class="hidden">
+      <h2>Todas las fotos</h2>
+      <p class="section-subtitle">
+        Desliza para explorar todas las fotos del evento. Pulsa en descargar si quieres guardarlas en tu móvil.
+      </p>
       <div id="gallery" class="gallery"></div>
       <p id="empty-msg" class="empty" style="display:none;">
-        No hay fotos todavía. ¡Sé el primero en subir una!
+        Todavía no hay fotos. Súbete la primera desde el botón "Subir foto".
       </p>
     </section>
   </main>
+
+  <footer>
+    <span>Hecho con 💜 para este evento</span>
+  </footer>
 
   <script src="app.js"></script>
 </body>

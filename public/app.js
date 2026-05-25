@@ -1,3 +1,4 @@
+let allPhotos = [];
 let carouselPhotos = [];
 let currentIndex = 0;
 let carouselInterval = null;
@@ -5,26 +6,40 @@ let carouselInterval = null;
 async function loadData() {
   const gallery = document.getElementById('gallery');
   const emptyMsg = document.getElementById('empty-msg');
+  const lastStrip = document.getElementById('last-photos-strip');
 
   try {
     const res = await fetch('/api/photos');
     const photos = await res.json();
 
-    if (!photos || photos.length === 0) {
+    allPhotos = photos || [];
+
+    if (allPhotos.length === 0) {
       emptyMsg.style.display = 'block';
       return;
     }
 
-    // Galería completa
-    gallery.innerHTML = photos.map(photo => `
+    // 1) Galería completa (pestaña "Todas las fotos")
+    gallery.innerHTML = allPhotos.map(photo => `
       <div class="photo-card">
-        <img src="${photo.url}" alt="Foto" loading="lazy">
-        <a href="${photo.url}" download class="download-btn">⬇ Descargar</a>
+        <img src="${photo.url}" alt="Foto">
+        <a href="${photo.url}" download class="download-btn">Descargar</a>
       </div>
     `).join('');
 
-    // Carrusel
-    setupCarousel(photos);
+    // 2) Tira de últimas fotos en la sección Espejo
+    const last = [...allPhotos]
+      .sort((a, b) => new Date(b.uploaded) - new Date(a.uploaded))
+      .slice(0, 10);
+
+    lastStrip.innerHTML = last.map(p => `
+      <div class="last-photo-item">
+        <img src="${p.url}" alt="Foto reciente">
+      </div>
+    `).join('');
+
+    // 3) Carrusel dentro del marco-espejo
+    setupCarousel(allPhotos);
   } catch (err) {
     console.error(err);
     gallery.innerHTML = '<p class="error">Error cargando las fotos</p>';
@@ -36,11 +51,11 @@ function setupCarousel(photos) {
   const prevBtn = document.getElementById('carousel-prev');
   const nextBtn = document.getElementById('carousel-next');
 
-  if (!imgEl || photos.length === 0) return;
+  if (!imgEl || !photos || photos.length === 0) return;
 
-  // Mezclar aleatoriamente y tomar hasta 10
+  // Mezclar aleatoriamente y tomar hasta 12
   const shuffled = [...photos].sort(() => Math.random() - 0.5);
-  carouselPhotos = shuffled.slice(0, Math.min(10, shuffled.length));
+  carouselPhotos = shuffled.slice(0, Math.min(12, shuffled.length));
   currentIndex = 0;
 
   function showCurrent() {
@@ -82,4 +97,28 @@ function setupCarousel(photos) {
   startAutoSlide();
 }
 
+function setupTabs() {
+  const tabs = document.querySelectorAll('.nav-tab');
+  const homeSection = document.getElementById('home-section');
+  const allSection = document.getElementById('all-section');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const target = tab.dataset.tab;
+      if (target === 'home') {
+        homeSection.classList.remove('hidden');
+        allSection.classList.add('hidden');
+      } else {
+        homeSection.classList.add('hidden');
+        allSection.classList.remove('hidden');
+      }
+    });
+  });
+}
+
+// Inicializar
+setupTabs();
 loadData();
