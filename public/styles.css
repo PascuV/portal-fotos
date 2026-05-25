@@ -73,6 +73,23 @@ header {
   background: rgba(0, 0, 0, 0.03);
 }
 
+/* Botón/enlace de administración en el header (discreto) */
+.admin-link {
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.admin-link:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: #333;
+}
+
 .btn-upload, .btn-back {
   background: linear-gradient(135deg, #ff9a9e, #fecf6a);
   color: #fff;
@@ -212,10 +229,18 @@ main {
   background: #fff;
 }
 
+/* Botón subir foto bajo el carrusel */
+
+.upload-cta {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
 /* TIRA DE ÚLTIMAS FOTOS */
 
 .last-photos {
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 .last-photos h2 {
@@ -319,7 +344,7 @@ main {
   margin-top: 2rem;
 }
 
-/* ESTADOS GENERALES */
+/* ADMIN */
 
 .hidden {
   display: none;
@@ -327,6 +352,62 @@ main {
 
 .error {
   color: #d11a2a;
+}
+
+.admin-msg {
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+.admin-msg.ok {
+  color: #4b7f2c;
+}
+
+.admin-msg.error {
+  color: #d11a2a;
+}
+
+#admin-login {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+#admin-login input {
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+#admin-login button {
+  border: none;
+  background: #8f7bff;
+  color: #fff;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.admin-photo-card {
+  position: relative;
+}
+
+.admin-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 64, 105, 0.95);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(255, 64, 105, 0.4);
 }
 
 /* FOOTER */
@@ -363,7 +444,7 @@ footer {
 
 .preview {
   max-width: 100%;
-  max-height: 420px; /* también vertical-friendly */
+  max-height: 420px; /* vertical-friendly */
   margin: 1.5rem auto;
   border-radius: 16px;
   box-shadow: 0 10px 26px rgba(17, 24, 39, 0.18);
@@ -437,84 +518,3 @@ footer {
     padding-inline: 1rem;
   }
 }
-
-.admin-msg {
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
-}
-
-.admin-msg.ok {
-  color: #4b7f2c;
-}
-
-.admin-msg.error {
-  color: #d11a2a;
-}
-
-#admin-login {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-#admin-login input {
-  padding: 0.4rem 0.6rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 0.9rem;
-}
-
-#admin-login button {
-  border: none;
-  background: #8f7bff;
-  color: #fff;
-  padding: 0.45rem 1rem;
-  border-radius: 999px;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.admin-photo-card {
-  position: relative;
-}
-
-.admin-delete-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(255, 64, 105, 0.95);
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  padding: 0.25rem 0.7rem;
-  font-size: 0.75rem;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(255, 64, 105, 0.4);
-}
-
-/* Botón/enlace de administración en el header (discreto) */
-.admin-link {
-  border: none;
-  background: transparent;
-  color: #666;
-  font-size: 0.9rem;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  border-radius: 999px;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-
-.admin-link:hover {
-  background: rgba(0, 0, 0, 0.04);
-  color: #333;
-}
-
-/* Contenedor del botón "Subir foto" bajo el carrusel */
-.upload-cta {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-}
-

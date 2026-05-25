@@ -8,18 +8,20 @@
 </head>
 <body>
   <header>
-  <div class="logo">
-    <span class="logo-icon">✨</span>
-    <span class="logo-text">Espejo de Fotos</span>
-  </div>
-  <nav class="nav-tabs">
-    <button class="nav-tab active" data-tab="home">Espejo</button>
-    <button class="nav-tab" data-tab="all">Todas las fotos</button>
-  </nav>
-  <button class="admin-link" id="admin-header-link" type="button">
-    Administrar
-  </button>
-</header>
+    <div class="logo">
+      <span class="logo-icon">✨</span>
+      <span class="logo-text">Espejo de Fotos</span>
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="home">Espejo</button>
+      <button class="nav-tab" data-tab="all">Todas las fotos</button>
+    </nav>
+
+    <button class="admin-link" id="admin-header-link" type="button">
+      Administrar
+    </button>
+  </header>
 
   <main>
     <!-- SECCIÓN ESPEJO / CARRUSEL -->
@@ -48,10 +50,10 @@
         </div>
       </div>
 
+      <!-- Botón de subir foto bajo el carrusel -->
       <div class="upload-cta">
-    <a href="upload.html" class="btn-upload">Subir foto</a>
-  </div>
-  <section class="last-photos">
+        <a href="upload.html" class="btn-upload">Subir foto</a>
+      </div>
 
       <section class="last-photos">
         <h2>Últimas fotos</h2>
@@ -70,17 +72,20 @@
         Todavía no hay fotos. Súbete la primera desde el botón "Subir foto".
       </p>
     </section>
+
     <!-- SECCIÓN ADMINISTRACIÓN -->
     <section id="admin-section" class="hidden">
       <h2>Administración</h2>
       <p class="section-subtitle">
         Introduce la contraseña para gestionar y eliminar fotos.
       </p>
+
       <div id="admin-login">
         <input type="password" id="admin-password" placeholder="Contraseña de administración">
         <button id="admin-login-btn" type="button">Acceder</button>
         <span id="admin-login-msg" class="admin-msg"></span>
       </div>
+
       <div id="admin-content" class="hidden">
         <p class="section-subtitle">
           Haz clic en "Eliminar" sobre una foto para borrarla (acción irreversible).

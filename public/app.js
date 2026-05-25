@@ -17,21 +17,23 @@ async function loadData() {
 
     allPhotos = photos || [];
 
-    // Galería "Todas las fotos"
+    // ---- "Todas las fotos" ----
     if (!allPhotos.length) {
-      emptyMsg.style.display = 'block';
-      gallery.innerHTML = '';
+      if (emptyMsg) emptyMsg.style.display = 'block';
+      if (gallery) gallery.innerHTML = '';
     } else {
-      emptyMsg.style.display = 'none';
-      gallery.innerHTML = allPhotos.map(photo => `
-        <div class="photo-card">
-          <img src="${photo.url}" alt="Foto">
-          <a href="${photo.url}" download class="download-btn">Descargar</a>
-        </div>
-      `).join('');
+      if (emptyMsg) emptyMsg.style.display = 'none';
+      if (gallery) {
+        gallery.innerHTML = allPhotos.map(photo => `
+          <div class="photo-card">
+            <img src="${photo.url}" alt="Foto">
+            <a href="${photo.url}" download class="download-btn">Descargar</a>
+          </div>
+        `).join('');
+      }
     }
 
-    // Tira últimas fotos (máx 10)
+    // ---- Últimas fotos (tira) ----
     if (lastStrip) {
       const last = [...allPhotos]
         .sort((a, b) => new Date(b.uploaded) - new Date(a.uploaded))
@@ -44,16 +46,18 @@ async function loadData() {
       `).join('');
     }
 
-    // Carrusel / Espejo
+    // ---- Carrusel / Espejo ----
     setupCarousel(allPhotos);
 
-    // Si ya está desbloqueado el admin, refrescar su galería
+    // ---- Si admin ya está desbloqueado, refrescar galería admin ----
     if (adminUnlocked) {
       renderAdminGallery();
     }
   } catch (err) {
     console.error(err);
-    gallery.innerHTML = '<p class="error">Error cargando las fotos</p>';
+    if (gallery) {
+      gallery.innerHTML = '<p class="error">Error cargando las fotos</p>';
+    }
   }
 }
 
@@ -107,6 +111,8 @@ function setupCarousel(photos) {
   startAutoSlide();
 }
 
+/* Pestañas Espejo / Todas + botón Administrar */
+
 function setupTabs() {
   const tabs = document.querySelectorAll('.nav-tab');
   const homeSection = document.getElementById('home-section');
@@ -114,7 +120,7 @@ function setupTabs() {
   const adminSection = document.getElementById('admin-section');
   const adminHeaderLink = document.getElementById('admin-header-link');
 
-  // Pestañas Espejo / Todas las fotos
+  // Pestañas Espejo / Todas
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
@@ -122,21 +128,21 @@ function setupTabs() {
 
       const target = tab.dataset.tab;
       if (target === 'home') {
-        homeSection.classList.remove('hidden');
-        allSection.classList.add('hidden');
-        adminSection.classList.add('hidden');
+        if (homeSection) homeSection.classList.remove('hidden');
+        if (allSection) allSection.classList.add('hidden');
+        if (adminSection) adminSection.classList.add('hidden');
       } else if (target === 'all') {
-        homeSection.classList.add('hidden');
-        allSection.classList.remove('hidden');
-        adminSection.classList.add('hidden');
+        if (homeSection) homeSection.classList.add('hidden');
+        if (allSection) allSection.classList.remove('hidden');
+        if (adminSection) adminSection.classList.add('hidden');
       }
     });
   });
 
   // Botón "Administrar" del header
-  if (adminHeaderLink) {
+  if (adminHeaderLink && homeSection && allSection && adminSection) {
     adminHeaderLink.addEventListener('click', () => {
-      // Quitar el activo de las pestañas porque estamos en vista "especial"
+      // Ninguna pestaña activa visualmente
       tabs.forEach(t => t.classList.remove('active'));
 
       homeSection.classList.add('hidden');
@@ -145,7 +151,6 @@ function setupTabs() {
     });
   }
 }
-
 
 /* ADMINISTRACIÓN */
 
@@ -199,16 +204,16 @@ function renderAdminGallery() {
   adminEmptyMsg.style.display = 'none';
 
   adminGallery.innerHTML = allPhotos.map(photo => {
-  // Por si el backend no mandara filename, lo sacamos de la URL
-  const fname = photo.filename || (photo.url ? photo.url.split('/').pop() : '');
-  return `
-    <div class="photo-card admin-photo-card" data-filename="${fname}">
-      <button class="admin-delete-btn" type="button">Eliminar</button>
-      <img src="${photo.url}" alt="Foto">
-      <a href="${photo.url}" download class="download-btn">Descargar</a>
-    </div>
-  `;
-}).join('');
+    // Fallback por si no viniera filename (lo sacamos de la URL)
+    const fname = photo.filename || (photo.url ? photo.url.split('/').pop() : '');
+    return `
+      <div class="photo-card admin-photo-card" data-filename="${fname}">
+        <button class="admin-delete-btn" type="button">Eliminar</button>
+        <img src="${photo.url}" alt="Foto">
+        <a href="${photo.url}" download class="download-btn">Descargar</a>
+      </div>
+    `;
+  }).join('');
 
   adminGallery.querySelectorAll('.admin-delete-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
@@ -225,9 +230,12 @@ function renderAdminGallery() {
       if (!confirmDelete) return;
 
       try {
-        const resp = await fetch('/api/photos/' + encodeURIComponent(filename) + '?key=' + encodeURIComponent(password), {
-          method: 'DELETE'
-        });
+        const resp = await fetch(
+          '/api/photos/' + encodeURIComponent(filename) +
+          '?key=' + encodeURIComponent(password),
+          { method: 'DELETE' }
+        );
+
         const data = await resp.json();
 
         if (!resp.ok || !data.success) {
@@ -235,11 +243,15 @@ function renderAdminGallery() {
           return;
         }
 
-        // Eliminar del array local
-        allPhotos = allPhotos.filter(p => p.filename !== filename);
-        // Volver a renderizar todo lo que depende de allPhotos
+        // Quitar de allPhotos
+        allPhotos = allPhotos.filter(p => {
+          const pfname = p.filename || (p.url ? p.url.split('/').pop() : '');
+          return pfname !== filename;
+        });
+
+        // Volver a pintar admin, galería y espejo
         renderAdminGallery();
-        loadData(); // refresca galería y carrusel
+        loadData();
       } catch (err) {
         console.error(err);
         alert('Error al comunicar con el servidor.');
