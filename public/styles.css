@@ -493,3 +493,28 @@ footer {
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(255, 64, 105, 0.4);
 }
+
+/* Botón/enlace de administración en el header (discreto) */
+.admin-link {
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.admin-link:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: #333;
+}
+
+/* Contenedor del botón "Subir foto" bajo el carrusel */
+.upload-cta {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+

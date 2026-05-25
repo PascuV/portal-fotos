@@ -112,7 +112,9 @@ function setupTabs() {
   const homeSection = document.getElementById('home-section');
   const allSection = document.getElementById('all-section');
   const adminSection = document.getElementById('admin-section');
+  const adminHeaderLink = document.getElementById('admin-header-link');
 
+  // Pestañas Espejo / Todas las fotos
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
@@ -127,14 +129,23 @@ function setupTabs() {
         homeSection.classList.add('hidden');
         allSection.classList.remove('hidden');
         adminSection.classList.add('hidden');
-      } else if (target === 'admin') {
-        homeSection.classList.add('hidden');
-        allSection.classList.add('hidden');
-        adminSection.classList.remove('hidden');
       }
     });
   });
+
+  // Botón "Administrar" del header
+  if (adminHeaderLink) {
+    adminHeaderLink.addEventListener('click', () => {
+      // Quitar el activo de las pestañas porque estamos en vista "especial"
+      tabs.forEach(t => t.classList.remove('active'));
+
+      homeSection.classList.add('hidden');
+      allSection.classList.add('hidden');
+      adminSection.classList.remove('hidden');
+    });
+  }
 }
+
 
 /* ADMINISTRACIÓN */
 
@@ -187,13 +198,17 @@ function renderAdminGallery() {
 
   adminEmptyMsg.style.display = 'none';
 
-  adminGallery.innerHTML = allPhotos.map(photo => `
-    <div class="photo-card admin-photo-card" data-filename="${photo.filename}">
+  adminGallery.innerHTML = allPhotos.map(photo => {
+  // Por si el backend no mandara filename, lo sacamos de la URL
+  const fname = photo.filename || (photo.url ? photo.url.split('/').pop() : '');
+  return `
+    <div class="photo-card admin-photo-card" data-filename="${fname}">
       <button class="admin-delete-btn" type="button">Eliminar</button>
       <img src="${photo.url}" alt="Foto">
       <a href="${photo.url}" download class="download-btn">Descargar</a>
     </div>
-  `).join('');
+  `;
+}).join('');
 
   adminGallery.querySelectorAll('.admin-delete-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {

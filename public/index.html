@@ -8,19 +8,18 @@
 </head>
 <body>
   <header>
-    <div class="logo">
-      <span class="logo-icon">✨</span>
-      <span class="logo-text">Espejo de Fotos</span>
-    </div>
-
-    <nav class="nav-tabs">
-  <button class="nav-tab active" data-tab="home">Espejo</button>
-  <button class="nav-tab" data-tab="all">Todas las fotos</button>
-  <button class="nav-tab" data-tab="admin">Administrar</button>
-</nav>
-
-    <a href="upload.html" class="btn-upload">Subir foto</a>
-  </header>
+  <div class="logo">
+    <span class="logo-icon">✨</span>
+    <span class="logo-text">Espejo de Fotos</span>
+  </div>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" data-tab="home">Espejo</button>
+    <button class="nav-tab" data-tab="all">Todas las fotos</button>
+  </nav>
+  <button class="admin-link" id="admin-header-link" type="button">
+    Administrar
+  </button>
+</header>
 
   <main>
     <!-- SECCIÓN ESPEJO / CARRUSEL -->
@@ -48,6 +47,11 @@
           </div>
         </div>
       </div>
+
+      <div class="upload-cta">
+    <a href="upload.html" class="btn-upload">Subir foto</a>
+  </div>
+  <section class="last-photos">
 
       <section class="last-photos">
         <h2>Últimas fotos</h2>
