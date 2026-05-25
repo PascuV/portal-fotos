@@ -518,3 +518,14 @@ footer {
     padding-inline: 1rem;
   }
 }
+
+/* Botón grande dentro del texto del héroe */
+.upload-cta-inline {
+  margin: 0.8rem 0 1rem;
+}
+
+.btn-upload-big {
+  padding: 0.9rem 2.4rem;
+  font-size: 1rem;
+}
+
