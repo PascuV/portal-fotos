@@ -74,3 +74,39 @@ app.get('/api/photos', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Portal de fotos en http://localhost:${PORT}`);
 });
+
+// API: eliminar foto (administración)
+// Ej: DELETE /api/photos/1234-foto.jpg?key=escalon2026
+app.delete('/api/photos/:filename', (req, res) => {
+  const adminKey = process.env.ADMIN_KEY || 'escalon2026';
+  const providedKey = req.query.key;
+
+  if (!providedKey || providedKey !== adminKey) {
+    return res.status(401).json({ error: 'No autorizado' });
+  }
+
+  const filename = req.params.filename;
+
+  // Evitar rutas tipo ../
+  if (filename.includes('..')) {
+    return res.status(400).json({ error: 'Nombre de archivo no válido' });
+  }
+
+  const filePath = path.join(uploadsDir, filename);
+
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      return res.status(404).json({ error: 'Archivo no encontrado' });
+    }
+
+    fs.unlink(filePath, (err2) => {
+      if (err2) {
+        console.error(err2);
+        return res.status(500).json({ error: 'Error borrando el archivo' });
+      }
+
+      return res.json({ success: true });
+    });
+  });
+});
+
